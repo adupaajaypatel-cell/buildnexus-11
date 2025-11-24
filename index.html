@@ -174,8 +174,7 @@ footer{text-align:center;padding:2rem 0;color:#888;font-size:0.9rem;}
 <p>Analyzing your file with BuildNexus AI...</p>
 </div>
 <div class="result" id="result">
-<h3>AI Analysis Complete ✔</h3>
-<p>Your estimation, planning & safety insights are ready.</p>
+<!-- Dynamic AI report will appear here -->
 </div>
 </section>
 
@@ -242,13 +241,38 @@ uploadBox.addEventListener('dragleave',()=>{uploadBox.style.background='#F8FBFF'
 uploadBox.addEventListener('drop',(e)=>{e.preventDefault();handleFile(e.dataTransfer.files[0]);});
 fileInput.addEventListener('change',(e)=>handleFile(e.target.files[0]));
 
+// Dynamic AI report generator
+function generateAIReport() {
+  const cost = (Math.random() * (200000 - 50000) + 50000).toFixed(0);
+  const timeline = Math.floor(Math.random() * (12 - 2) + 2);
+  const safetyLevels = ['Low', 'Moderate', 'High'];
+  const safety = safetyLevels[Math.floor(Math.random() * safetyLevels.length)];
+  return { cost, timeline, safety };
+}
+
+// Modified handleFile function
 function handleFile(file){
-if(!file) return;
-previewImage.src=URL.createObjectURL(file);
-uploadPreview.style.display='block';
-loading.style.display='block';
-result.style.display='none';
-setTimeout(()=>{loading.style.display='none';result.style.display='block';},3000);
+  if(!file) return;
+  previewImage.src = URL.createObjectURL(file);
+  uploadPreview.style.display = 'block';
+  loading.style.display = 'block';
+  result.innerHTML = '';
+
+  setTimeout(()=>{
+    loading.style.display = 'none';
+    const report = generateAIReport();
+    result.innerHTML = `
+      <h3>AI Analysis Complete ✔</h3>
+      <p><strong>Estimated Project Cost:</strong> £${report.cost}</p>
+      <p><strong>Estimated Timeline:</strong> ${report.timeline} months</p>
+      <p><strong>Safety Risk Level:</strong> ${report.safety}</p>
+      <button id="signupBtn">Sign Up for Beta</button>
+    `;
+    result.style.display = 'block';
+
+    const signupBtn = document.getElementById('signupBtn');
+    signupBtn.addEventListener('click', () => { window.location.href = '#contact'; });
+  }, 3000);
 }
 </script>
 
